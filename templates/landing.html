@@ -20,7 +20,7 @@
         </p>
         <div class="hero-actions">
             <a href="{{ url_for('register') }}" class="btn-primary">Create free account</a>
-            <a href="{{ url_for('login') }}" class="btn-primary btn-primary-alt">See how it works</a>
+            <a href="#" class="btn-primary btn-primary-alt">See how it works</a>
         </div>
     </div>
 
@@ -101,5 +101,63 @@
         <a href="{{ url_for('register') }}" class="btn-primary">Create free account</a>
     </div>
 </section>
+
+<div id="video-modal" class="video-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="How Spendly works">
+    <div class="video-modal-panel" role="document">
+        <button type="button" class="video-modal-close" aria-label="Close video">&times;</button>
+        <div class="video-modal-frame">
+            <iframe
+                data-src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                src=""
+                title="How Spendly works"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe>
+        </div>
+    </div>
+</div>
+
+{% block scripts %}
+<script>
+    (function () {
+        var openBtn = document.querySelector('.hero-actions .btn-primary-alt');
+        var modal = document.getElementById('video-modal');
+        if (!openBtn || !modal) return;
+
+        var iframe = modal.querySelector('iframe');
+        var videoSrc = iframe.getAttribute('data-src');
+        var closeBtn = modal.querySelector('.video-modal-close');
+
+        function openModal() {
+            if (videoSrc) iframe.setAttribute('src', videoSrc);
+            modal.classList.add('is-open');
+            modal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            modal.classList.remove('is-open');
+            modal.setAttribute('aria-hidden', 'true');
+            iframe.setAttribute('src', '');
+            document.body.style.overflow = '';
+        }
+
+        openBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            openModal();
+        });
+
+        closeBtn.addEventListener('click', closeModal);
+
+        modal.addEventListener('click', function (e) {
+            if (e.target === modal) closeModal();
+        });
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
+        });
+    })();
+</script>
+{% endblock %}
 
 {% endblock %}
